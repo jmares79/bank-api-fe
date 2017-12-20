@@ -45,7 +45,6 @@ class Login extends React.Component {
             <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
         </form>
         <p>You must log in to view the page at {from.pathname}</p>
-        <button onClick={this.login}>Log in</button>
       </div>
     )
   }

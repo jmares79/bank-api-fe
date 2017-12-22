@@ -6,14 +6,14 @@ import {
   Switch,
   Route,
   Redirect
-} from 'react-router-dom'
+} from 'react-router-dom';
+
+import RootRouteWrapper from './components/RootRouteWrapper';
 
 import logo from './isoftbet-logo-new.png';
 import './App.css';
 import './index.css';
 
-import PrivateRoute from './components/PrivateRoute'
-import Home from './components/Home'
 import Login from './components/Login'
 
 
@@ -23,16 +23,17 @@ const Protected = () => <h3>Protected</h3>;
 class App extends Component {
   render() {
     return (
-        <Router>
-          <div>
+        <div>
             <header className="App-header">
               <img src={logo} alt="logo" />
               <h1 className="App-title">ISoft Bet API</h1>
             </header>
-            <Route path="/login" component={Login}/>
-            <PrivateRoute path="/home" component={Home} />
-          </div>
-      </Router>
+
+            <Switch>
+              <Route exact path="/" component={Login} />
+              <Route path="/" component={RootRouteWrapper} />
+            </Switch>
+        </div>
     );
   }
 }

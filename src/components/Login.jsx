@@ -28,15 +28,25 @@ class Login extends React.Component {
 
             self.setState({
                 redirectToReferrer: true,
-                access_token: response.data.access_token
+                access_token: response.data.access_token,
+                isLoggedIn: true
             });
+
+            localStorage.setItem('access_token', response.data.access_token);
+
         }).catch(function (error) {
             console.error(error);
         });
     }
 
     render() {
-        const { from } = this.props.location.state || { from: { pathname: '/' } }
+        const { from } = this.props.location.state || { from: { pathname: '/home' } }
+
+        if (this.state.redirectToReferrer) {
+            return (
+                <Redirect to={from} isLoggedIn={true}/>
+            )
+        }
 
         return (
           <div className="container">

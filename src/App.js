@@ -1,46 +1,43 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+
+import {
+  BrowserRouter,
+  Route,
+  Redirect,
+  Switch
+} from 'react-router-dom'
+
 import logo from './isoftbet-logo-new.png';
 import './App.css';
 import './index.css';
 
-import TransactionList from './components/TransactionList'
+import Home from './components/Home'
+import Login from './components/Auth/Login'
+import Logout from './components/Auth/Logout'
+import NotFoundRoute from './components/Auth/NotFoundRoute'
 
-const API_URL_GET_ALL_TRANSACTIONS = 'http://127.0.0.1:8000/api/transactions/1';
+import { isLoggedIn } from './utils/AuthService';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    var self = this;
-
-    this.state = {
-      transactions: [],
-    };
-
-    axios.get(API_URL_GET_ALL_TRANSACTIONS)
-      .then(function (response) {
-          self.setState({ transactions: response.data.transactions });
-      })
-      .catch(function (error) {
-          console.log(error);
-      });
-  }
-
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} alt="logo" />
-          <h1 className="App-title">I Soft Bet API</h1>
-        </header>
-        <div className="container">
-          <div className="row transactions-container">
-            <div className="col-12 col-md-9 pull-md-3 bd-content">
-              <TransactionList transactions={this.state.transactions}/>
-            </div>
+        <BrowserRouter>
+          <div className="App">
+            <header className="App-header">
+              <img src={logo} alt="logo" />
+              <h1 className="App-title">ISoft Bet API</h1>
+            </header>
+            <Switch>
+              <Route exact path="/" render={() => (
+                isLoggedIn() ? <Redirect to="/home" /> : <Redirect to={{pathname: '/login', state: { from: this.props.location }}} />
+              )}/>
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/logout" component={Logout} />
+              <Route exact path="/home" component={Home} />
+              <Route component={NotFoundRoute}/>
+            </Switch>
           </div>
-        </div>
-      </div>
+      </BrowserRouter>
     );
   }
 }

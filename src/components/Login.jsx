@@ -1,42 +1,51 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import { setAccessToken } from '../utils/AuthService';
 
 const API_URL_LOGIN = "http://127.0.0.1:8000/api/login";
 
-class Login extends React.Component {
-    state = {
-        redirectToReferrer: false
-    }
+class Login extends Component {
+    // constructor(props) {
+    //     super(props);
+    // }
+    state = { redirectToReferrer: false }
 
-    handleEmailChange = (e) => {
-        this.setState({email: e.target.value});
-    }
-
-    handlePasswordChange = (e) => {
-        this.setState({password: e.target.value});
-    }
+    handleEmailChange = (e) => { this.setState({email: e.target.value}); }
+    handlePasswordChange = (e) => {this.setState({password: e.target.value}); }
 
     login = () => {
         var self = this;
 
-        axios.post('http://127.0.0.1:8000/api/login', {
+        axios.post(API_URL_LOGIN, {
             email: self.state.email,
             password: self.state.password
         }).then(function (response) {
             console.log(response);
 
-            self.setState({
-                redirectToReferrer: true,
-                access_token: response.data.access_token
-            });
+            self.setState(() => ({ redirectToReferrer: true }))
+            // let loginState = {
+            //     isLoggedIn: true,
+            //     access_token: response.data.access_token
+            // };
+
+            setAccessToken(response.data.access_token);
+            window.location.href = "/home";
+            // self.props.route.updateLoginState(loginState);
         }).catch(function (error) {
             console.error(error);
         });
     }
 
     render() {
-        const { from } = this.props.location.state || { from: { pathname: '/' } }
+        const from = this.props.location.state || { from: { pathname: '/' } }
+        const redirectToReferrer = this.state
+        debugger;
+        if (redirectToReferrer === true) {
+            return (
+                <Redirect to={from} />
+            )
+        }
 
         return (
           <div className="container">

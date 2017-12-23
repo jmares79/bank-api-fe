@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 
 import {
-  BrowserRouter as Router,
-  Link,
-  Switch,
+  BrowserRouter,
   Route,
   Redirect
 } from 'react-router-dom'
@@ -12,27 +10,50 @@ import logo from './isoftbet-logo-new.png';
 import './App.css';
 import './index.css';
 
-import PrivateRoute from './components/PrivateRoute'
+// import PrivateRoute from './components/PrivateRoute'
 import Home from './components/Home'
 import Login from './components/Login'
+import Logout from './components/Logout'
 
-
-const Public = () => <h3>Public</h3>;
-const Protected = () => <h3>Protected</h3>;
+import { isLoggedIn } from './utils/AuthService';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    // this.state = {
+    //   isLoggedIn: false,
+    //   access_token: null
+    // }
+
+    console.log("Logged in? " + isLoggedIn());
+  }
+
+  // updateLoginState = (loginState) => {
+  //   this.setState({
+  //     isLoggedIn: loginState.isLoggedIn,
+  //     access_token: loginState.access_token
+  //   });
+  // }
+
   render() {
     return (
-        <Router>
+        <BrowserRouter>
           <div>
             <header className="App-header">
               <img src={logo} alt="logo" />
               <h1 className="App-title">ISoft Bet API</h1>
             </header>
-            <Route path="/login" component={Login}/>
-            <PrivateRoute path="/home" component={Home} />
+
+            <Route path="/" render={() => (
+              isLoggedIn() ? <Redirect to="/home" /> : <Redirect to={{pathname: '/login', state: { from: this.props.location }}} />
+            )}/>
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/logout" component={Logout} />
+            <Route exact path="/home" component={Home} />
+
           </div>
-      </Router>
+      </BrowserRouter>
     );
   }
 }

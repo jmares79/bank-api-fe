@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-// import Login from './Login'
-
-import { logout } from '../utils/AuthService';
+import { logout } from '../../utils/AuthService';
 
 class Logout extends Component {
     constructor(props) {

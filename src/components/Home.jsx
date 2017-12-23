@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { getAccessToken } from '../utils/AuthService';
 
-import logo from '../isoftbet-logo-new.png';
 import '../App.css';
 import '../index.css';
 
@@ -21,12 +20,9 @@ class Home extends Component {
       transactions: [],
     };
 
-    console.log("Home constructor");
-
     let token = getAccessToken();
 
-    axios.get(
-      API_URL_GET_ALL_TRANSACTIONS,
+    axios.get(API_URL_GET_ALL_TRANSACTIONS,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -43,19 +39,13 @@ class Home extends Component {
 
   render() {
     return (
-        <div className="App">
-          <header className="App-header">
-            <img src={logo} alt="logo" />
-            <h1 className="App-title">ISoft Bet API</h1>
-          </header>
-          <div className="container">
-            <div className="row transactions-container">
-              <div className="col-12 col-md-9 pull-md-3 bd-content">
-                <TransactionList transactions={this.state.transactions}/>
-              </div>
-            </div>
+      <div className="container">
+        <div className="row transactions-container">
+          <div className="col-12 col-md-9 pull-md-3 bd-content">
+            <TransactionList transactions={this.state.transactions}/>
           </div>
         </div>
+      </div>
     );
   }
 }
